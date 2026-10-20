@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OSRS Stats</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="search">
+    <h1>OSRS Stats</h1>
+    <form id="search-form">
+      <label for="player-name" class="visually-hidden">Character name</label>
+      <input id="player-name" name="player" type="text" maxlength="12"
+             placeholder="Enter a character name" autocomplete="off" required>
+      <button type="submit">Look up</button>
+      <button type="button" id="demo-button" class="secondary">Try demo data</button>
+    </form>
+    <p id="status" role="status"></p>
+  </header>
+
+  <main id="results" hidden>
+    <h2 id="player-title"></h2>
+    <p id="overall"></p>
+
+    <!-- The view bar. Skill views only change the text in each tile, so colors and effects stay. -->
+    <nav class="tabs" role="tablist">
+      <button role="tab" data-view="level" aria-selected="true">Levels</button>
+      <button role="tab" data-view="rank" aria-selected="false">Ranks</button>
+      <button role="tab" data-view="xp" aria-selected="false">XP</button>
+      <button role="tab" data-view="bosses" aria-selected="false">Bosses</button>
+      <button role="tab" data-view="activities" aria-selected="false">Clues &amp; Minigames</button>
+      <button role="tab" data-view="collection" aria-selected="false">Collection Log</button>
+    </nav>
+
+    <section id="skills-panel" class="panel">
+      <div id="skill-grid" class="skill-grid" data-view="level"></div>
+    </section>
+
+    <section id="bosses-panel" class="panel" hidden>
+      <ul id="boss-list" class="score-list"></ul>
+    </section>
+
+    <section id="activities-panel" class="panel" hidden>
+      <ul id="activity-list" class="score-list"></ul>
+    </section>
+
+    <section id="collection-panel" class="panel" hidden>
+      <div id="collection-summary" class="collection-card"></div>
+      <p class="note">The official hiscores only publish your total collection log count.
+        Listing individual items would need a RuneLite sync service such as TempleOSRS.</p>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
