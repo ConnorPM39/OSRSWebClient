@@ -1,7 +1,7 @@
 // Paste your Cloudflare Worker URL here once it is deployed (see README).
 // The browser can't call the Jagex hiscores directly because of CORS,
 // so the Worker fetches it for us.
-const PROXY_URL = "https://YOUR-WORKER.YOUR-NAME.workers.dev";
+const PROXY_URL = "https://odd-hall-c67a.connor-e3a.workers.dev";
 
 // The order skills appear in-game: 3 columns, read left to right, top to bottom.
 const SKILL_LAYOUT = [
