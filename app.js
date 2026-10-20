@@ -43,7 +43,9 @@ form.addEventListener("submit", async (event) => {
   }
 });
 
-document.getElementById("demo-button").addEventListener("click", () => {
+// The ?. skips this if the demo button is removed or commented out in index.html.
+// Without it, the error would stop the rest of this file and the tabs would never work.
+document.getElementById("demo-button")?.addEventListener("click", () => {
   statusText.textContent = "Showing made-up demo data.";
   showPlayer("Demo Player", makeDemoData());
 });
