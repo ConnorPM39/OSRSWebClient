@@ -1,0 +1,208 @@
+/* ---------- Theme ----------
+   Change these variables to restyle the whole page. */
+:root {
+  --page-bg: #1b1712;
+  --panel-bg: #2b251d;
+  --text: #f3e9d2;
+  --muted: #b5a88c;
+  --accent: #ffb000;
+  --tile-empty: #3a3226;
+
+  /* One color per 10 levels: band-0 is levels 1-9, band-9 is levels 90-98. */
+  --band-0: #4a4a4a;
+  --band-1: #6b4a2f;
+  --band-2: #8a5a2b;
+  --band-3: #a0522d;
+  --band-4: #b8860b;
+  --band-5: #6b8e23;
+  --band-6: #2e8b57;
+  --band-7: #2a7fa8;
+  --band-8: #5b4bb7;
+  --band-9: #9b2d8f;
+  --band-max: #1e1a14;
+
+  /* Wave speed: how long each step of the diagonal takes. */
+  --wave-step: 90ms;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--page-bg);
+  color: var(--text);
+  font-family: system-ui, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1rem;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+/* ---------- Search ---------- */
+.search { text-align: center; }
+.search h1 { color: var(--accent); margin-top: 0; }
+
+#search-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+input, button {
+  font: inherit;
+  padding: 0.6rem 0.9rem;
+  border-radius: 6px;
+  border: 1px solid #5a4d3a;
+}
+
+input { background: var(--panel-bg); color: var(--text); min-width: 14rem; }
+button { background: var(--accent); color: #1b1712; cursor: pointer; font-weight: 600; }
+button.secondary { background: transparent; color: var(--muted); }
+
+#status { color: var(--muted); min-height: 1.5em; }
+
+/* ---------- Results ---------- */
+main { width: 100%; max-width: 30rem; }
+main h2 { text-align: center; margin-bottom: 0.25rem; }
+#overall { text-align: center; color: var(--muted); margin-top: 0; }
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.tabs button {
+  flex: 1 1 auto;
+  background: var(--panel-bg);
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.tabs button[aria-selected="true"] { background: var(--accent); color: #1b1712; }
+
+/* ---------- Skill grid: 3 wide x 8 tall ---------- */
+.skill-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+}
+
+/* The outer tile is a 3px frame. It is invisible until the skill is 99,
+   then it becomes the rainbow border. */
+.tile {
+  position: relative;
+  padding: 3px;
+  border-radius: 10px;
+  background: transparent;
+}
+
+.tile-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+  height: 3.5rem;
+  padding: 0 0.7rem;
+  border-radius: 7px;
+  background: var(--tile-empty);
+  /* --delay is set per tile in app.js from its row and column. */
+  transition: background-color 400ms ease var(--delay, 0ms);
+}
+
+.tile .icon { width: 25px; height: 25px; image-rendering: pixelated; }
+.tile .value { font-size: 1.15rem; font-weight: 700; text-shadow: 1px 1px 0 #000; }
+.tile .big-icon { display: none; height: 38px; margin: 0 auto; image-rendering: pixelated; }
+
+/* The wave: once the grid is revealed, each tile pops after its own delay. */
+.skill-grid.revealed .tile { animation: pop 500ms ease var(--delay, 0ms) both; }
+
+@keyframes pop {
+  0%   { transform: scale(1); }
+  45%  { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+
+/* Band colors only apply after the reveal, so the wave "paints" them in. */
+.skill-grid.revealed .tile[data-band="0"] .tile-inner { background-color: var(--band-0); }
+.skill-grid.revealed .tile[data-band="1"] .tile-inner { background-color: var(--band-1); }
+.skill-grid.revealed .tile[data-band="2"] .tile-inner { background-color: var(--band-2); }
+.skill-grid.revealed .tile[data-band="3"] .tile-inner { background-color: var(--band-3); }
+.skill-grid.revealed .tile[data-band="4"] .tile-inner { background-color: var(--band-4); }
+.skill-grid.revealed .tile[data-band="5"] .tile-inner { background-color: var(--band-5); }
+.skill-grid.revealed .tile[data-band="6"] .tile-inner { background-color: var(--band-6); }
+.skill-grid.revealed .tile[data-band="7"] .tile-inner { background-color: var(--band-7); }
+.skill-grid.revealed .tile[data-band="8"] .tile-inner { background-color: var(--band-8); }
+.skill-grid.revealed .tile[data-band="9"] .tile-inner { background-color: var(--band-9); }
+.skill-grid.revealed .tile[data-band="max"] .tile-inner { background-color: var(--band-max); }
+
+/* ---------- Level 99: rainbow border ----------
+   @property lets the browser animate a custom property, so the
+   gradient's starting angle can spin. */
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.skill-grid.revealed .tile[data-band="max"] {
+  background: conic-gradient(from var(--angle),
+    #ff5f5f, #ffb35f, #fff35f, #5fff8f, #5fd7ff, #a35fff, #ff5f5f);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
+  animation:
+    pop 500ms ease var(--delay, 0ms) both,
+    spin 4s linear var(--delay, 0ms) infinite;
+}
+
+@keyframes spin { to { --angle: 360deg; } }
+
+/* In the Levels view a 99 shows the big icon instead of the number. */
+.skill-grid[data-view="level"].revealed .tile[data-band="max"] .icon,
+.skill-grid[data-view="level"].revealed .tile[data-band="max"] .value { display: none; }
+.skill-grid[data-view="level"].revealed .tile[data-band="max"] .big-icon { display: block; }
+
+/* ---------- Bosses, activities, collection log ---------- */
+.score-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.score-list li {
+  display: flex;
+  justify-content: space-between;
+  background: var(--panel-bg);
+  padding: 0.55rem 0.8rem;
+  border-radius: 6px;
+}
+
+.score-list .rank { color: var(--muted); font-size: 0.85rem; }
+
+.collection-card {
+  background: var(--panel-bg);
+  padding: 1.5rem;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 1.4rem;
+}
+
+.note { color: var(--muted); font-size: 0.85rem; }
+
+/* Respect people who turn off animations in their OS settings. */
+@media (prefers-reduced-motion: reduce) {
+  .skill-grid.revealed .tile { animation: none !important; }
+  .tile-inner { transition: none; }
+}
