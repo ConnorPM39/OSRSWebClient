@@ -184,11 +184,24 @@ function formatRank(rank) {
   return rank > 0 ? formatNumber(rank) : "—";
 }
 
+// The real OSRS XP table: the total XP needed to reach a level.
+// xpForLevel(2) is 83 and xpForLevel(99) is 13,034,431.
+function xpForLevel(level) {
+  let points = 0;
+  for (let n = 1; n < level; n++) {
+    points += Math.floor(n + 300 * Math.pow(2, n / 7));
+  }
+  return Math.floor(points / 4);
+}
+
 // Random stats in the same shape as the real hiscores JSON, for testing the effects.
 function makeDemoData() {
   const skills = SKILL_LAYOUT.map((name) => {
-    const level = Math.random() < 0.25 ? 99 : 1 + Math.floor(Math.random() * 98);
-    return { name, level, xp: level * level * 1000, rank: 1 + Math.floor(Math.random() * 500000) };
+    const level = Math.random() < 0.2 ? 99 : 1 + Math.floor(Math.random() * 98);
+    // Pick an XP amount that really belongs to this level.
+    const nextLevelXp = level < 99 ? xpForLevel(level + 1) : xpForLevel(99) + 2000000;
+    const xp = xpForLevel(level) + Math.floor(Math.random() * (nextLevelXp - xpForLevel(level)));
+    return { name, level, xp, rank: 1 + Math.floor(Math.random() * 500000) };
   });
   const total = skills.reduce((sum, s) => sum + s.level, 0);
   const totalXp = skills.reduce((sum, s) => sum + s.xp, 0);

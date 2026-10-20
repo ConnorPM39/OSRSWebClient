@@ -8,17 +8,18 @@
   --accent: #ffb000;
   --tile-empty: #3a3226;
 
-  /* One color per 10 levels: band-0 is levels 1-9, band-9 is levels 90-98. */
-  --band-0: #4a4a4a;
-  --band-1: #6b4a2f;
-  --band-2: #8a5a2b;
-  --band-3: #a0522d;
-  --band-4: #b8860b;
-  --band-5: #6b8e23;
-  --band-6: #2e8b57;
-  --band-7: #2a7fa8;
-  --band-8: #5b4bb7;
-  --band-9: #9b2d8f;
+  /* One color per 10 levels, running through the rainbow (ROYGBIV) from low to high.
+     band-0 is levels 1-9 (red), band-9 is levels 90-98 (violet). */
+  --band-0: #b3261e; /* red */
+  --band-1: #c4471b; /* red-orange */
+  --band-2: #c9701a; /* orange */
+  --band-3: #b8960f; /* yellow */
+  --band-4: #7f9a1f; /* yellow-green */
+  --band-5: #2e8b3e; /* green */
+  --band-6: #1f7a8c; /* blue-green */
+  --band-7: #2a5db0; /* blue */
+  --band-8: #4b3a9e; /* indigo */
+  --band-9: #7a3aa8; /* violet */
   --band-max: #1e1a14;
 
   /* Wave speed: how long each step of the diagonal takes. */
